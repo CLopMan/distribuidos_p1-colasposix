@@ -6,7 +6,7 @@
 #include "mensajes.h"
 
 mqd_t crear_cola(char name[CHAR_SIZE]) {
-    printf("%s", name);
+    printf("%s\n", name);
     char local_name[CHAR_SIZE];
     strcpy(local_name, name);
     struct mq_attr attr;
@@ -43,7 +43,8 @@ int hacer_peticion(char *queue_name, peticion *p, respuesta *r) {
     }
 
     // recibir petición 
-    if (-1 == mq_receive(yo, (char*)r, sizeof(r), NULL)) {
+    printf("recibiendo petición\n");
+    if (-1 == mq_receive(yo, (char*)r, sizeof(respuesta), NULL)) {
         perror("Error: recibir");
         return -1;
     }
@@ -58,7 +59,7 @@ int init() {
     respuesta r; 
 
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     p.op = 0; 
     strcpy(p.q_client, queue_name);
@@ -77,7 +78,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2) {
     respuesta r; 
 
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     // rellenar petición
     p.op = 1; 
@@ -103,7 +104,7 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2) {
     respuesta r; 
 
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     // rellenar petición
     p.op = 2; 
@@ -131,7 +132,7 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2){
     respuesta r; 
 
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     // rellenar petición
     p.op = 3; 
@@ -154,7 +155,7 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2){
 int delete_key(int key){
 
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     peticion p;
     respuesta r;
@@ -173,7 +174,7 @@ int delete_key(int key){
 
 int exist(int key){
     char queue_name[CHAR_SIZE];
-    sprintf(queue_name, "Client_%i", getpid());
+    sprintf(queue_name, "/Client_%i", getpid());
 
     peticion p;
     respuesta r;

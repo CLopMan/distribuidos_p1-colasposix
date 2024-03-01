@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
     int N;
     char cd[] = "cd";
     init();
-    /* set_value(3, cd, 3, tres);
+    set_value(3, cd, 3, tres);
     set_value(3, cd, 3, tres);
     set_value(3, cd, 3, tres);
     set_value(3, cd, 3, tres);
@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     modify_value(3, cd, 3, tres);
     modify_value(3, cd, 3, tres);
     delete_key(3);
-    exist(3); */
+    exist(3);
 
     return 0;
 }

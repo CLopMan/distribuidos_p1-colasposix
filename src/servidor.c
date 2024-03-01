@@ -15,6 +15,8 @@ void stop_server()
 
 int tratar_peticion(peticion *p){
     peticion local_peticion = *p;
+    respuesta r;
+
     switch (local_peticion.op)
     {
     case 0:
@@ -45,6 +47,9 @@ int tratar_peticion(peticion *p){
         printf("XD");
         break;
     }
+    r.success = 0;
+    mqd_t client = mq_open(p->q_client, O_WRONLY);
+    mq_send(client, (char*)&r, sizeof(respuesta), 0);
 }
 
 int main(int argc, char *argv[])
@@ -61,7 +66,9 @@ int main(int argc, char *argv[])
     server = mq_open("/SERVIDOR", O_CREAT | O_RDONLY, 0700, &attr);
 
     while(!!1){
-
+        peticion p; 
+        mq_receive(server, (char*)&p, sizeof(peticion), NULL);
+        tratar_peticion(&p);
 
     }
 
