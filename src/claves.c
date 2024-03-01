@@ -6,12 +6,18 @@
 #include "mensajes.h"
 
 mqd_t crear_cola(char name[CHAR_SIZE]) {
-    struct mq_attr attr; 
+    printf("%s", name);
+    char local_name[CHAR_SIZE];
+    strcpy(local_name, name);
+    struct mq_attr attr;
     attr.mq_curmsgs = 0;
     attr.mq_flags = 0; 
     attr.mq_maxmsg = 1;
     attr.mq_msgsize = sizeof(respuesta);
-    mqd_t queue = mq_open(name, O_CREAT | O_RDONLY, 0700, &attr);
+    mqd_t queue = mq_open(local_name, O_CREAT | O_RDONLY, 0777, &attr);
+    if ((mqd_t) -1 == queue) {
+        printf("pitopausia\n");
+    }
     return queue;
 }
 
@@ -19,26 +25,26 @@ int hacer_peticion(char *queue_name, peticion *p, respuesta *r) {
     // servidor
     mqd_t server = mq_open("/SERVIDOR", O_WRONLY);
     if ((mqd_t) -1 == server) {
-        perror("Error:");
+        perror("Error: cola servidor");
         return -1;
     }
 
     // cliente
     mqd_t yo = crear_cola(queue_name);
     if ((mqd_t) -1 == yo) {
-        perror("Error:");
+        perror("Error: cola propia");
         return -1;
     }
 
     // enviar petición
     if (-1 == mq_send(server, (char*)p, sizeof(peticion), 0)) {
-        perror("Error: ");
+        perror("Error: enviar");
         return -1;
     }
 
     // recibir petición 
     if (-1 == mq_receive(yo, (char*)r, sizeof(r), NULL)) {
-        perror("Error:");
+        perror("Error: recibir");
         return -1;
     }
 
