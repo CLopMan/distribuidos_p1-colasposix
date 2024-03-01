@@ -3,8 +3,8 @@
 #define MENSAJE_H
 
 
-const int CHAR_SIZE = 256;
-const int ARR_SIZE = 32;
+#define CHAR_SIZE 256
+#define ARR_SIZE 32
 
 
 typedef struct __peticion {

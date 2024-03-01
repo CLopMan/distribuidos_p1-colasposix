@@ -119,3 +119,55 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2) {
     return r.success;
 
 }
+
+int modify_value(int key, char *value1, int N_value2, double *V_value2){
+    if(!exist(key)){
+        perror("Error:");
+        return -1;
+    }
+    return set_value(key, value1, N_value2, V_value2);
+}
+
+int delete_key(int key){
+    if(!exist(key)){
+        perror("Error: La clave no existe");
+        return -1;
+    }
+
+    char queue_name[CHAR_SIZE];
+    sprintf(queue_name, "Client_%i", getpid());
+
+    peticion p;
+    respuesta r;
+
+    p.op = 4;
+    p.key = key;
+    strcpy(p.q_client, queue_name);
+
+    if(-1 == hacer_peticion(queue_name, &p, &r)){
+        perror("Error:");
+        return -1;
+    }
+
+    return r.success;
+}
+
+int exist(int key){
+    char queue_name[CHAR_SIZE];
+    sprintf(queue_name, "Client_%i", getpid());
+
+    peticion p;
+    respuesta r;
+
+    p.op = 5;
+    p.key = key;
+    strcpy(p.q_client, queue_name);
+
+    if(-1 == hacer_peticion(queue_name, &p, &r)){
+        perror("Error:");
+        return -1;
+    }
+
+    return r.success;
+
+}

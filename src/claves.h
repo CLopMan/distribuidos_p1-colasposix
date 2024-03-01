@@ -46,7 +46,7 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2);
  * 
  * @return 0 en caso de éxito, -1 en cualquier otro caso
 */
-int modify_value(int key, char *value1, int N_value2, double V_value2);
+int modify_value(int key, char *value1, int N_value2, double *V_value2);
 
 /**
  * Elimina una tupla
