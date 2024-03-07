@@ -2,6 +2,7 @@
 *.o
 *.out
 *.log
-*.log
 *.aux
 *.toc
+client
+server
