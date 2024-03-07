@@ -1,6 +1,7 @@
 \documentclass[]{article}
 \usepackage{graphicx}
-\usepackage[margin=1.5cm]{geometry}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\usepackage[hidelinks]{hyperref}
 
 %title
 \title{Practica 1} 
@@ -21,7 +22,7 @@
 
     {\Huge \textbf{Práctica 1} \par}
     \vspace{0.5cm}
-    {\Large Sistemas Distribuidos \par}
+    {\Large Colas de mensajes POSIX \par}
     \vspace{8cm}
 
    \textbf{Ingeniería Informática, Tercer curso}\\
@@ -35,7 +36,36 @@
     \textbf{Grupo: } 81   
     
 \end{titlepage}
- 
+\newpage
+
+\renewcommand{\contentsname}{\centering Índice}
+\tableofcontents
+
+\newpage
+\section{Introducción}
+\label{sec:introduccion}
+Tu contenido de la sección de introducción.
+
+\section{Diseño}
+\label{sec:disenno}
+Tu contenido de la sección de desarrollo.
+\subsection{Mensajes}
+\label{subsec:mensajes}
+Aquí explicar los argumentos de entrada y salida que nos llevan a desarrollar las estructuras que hemos usado.
+
+
+\subsection{Uso de ficheros}
+\label{subsec:uso_de_ficheros}
+Aquí explicar cómo hemos usado ficheros como forma de almacenamiento y por qué. Comentar la escritura atómica para buffers pequeños. 
+
+
+\subsection{Servidor}
+\label{subsec:servidor}
+Aquí explicar el diseño concurrente del servidor. Donde están los mutex y por qué. Diseño de pool de hilos o hilo por petición. 
+
+\section{Conclusiones}
+\label{sec:conclusiones}
+Escribimos aquí
 
 
 \end{document}
