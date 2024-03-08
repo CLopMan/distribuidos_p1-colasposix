@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
    
 
-    while(!!1){
+    while(!!1) { 
         peticion p; 
         mq_receive(server, (char*)&p, sizeof(peticion), NULL);
         tratar_peticion(&p);

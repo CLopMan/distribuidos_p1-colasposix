@@ -7,19 +7,13 @@ N_value [4]
 double[32*8]
 */
 
-// la he probado con un minicódigo en c y parece que funciona
-int set_value(int key, char *value1, int N_value2, double *V_value2) {
-    /*validaciones*/
-    if (N_value2 > 32 || N_value2 < 1) {
-        perror("ERROR: N_value 2 out of range");
-    }
-
-
+int write_file(int key, char *value1, int N_value2, double *V_value2, char permiso[4]) {
     
     char file_name[32];
     sprintf(file_name, "%d.tuple", key);
 
-    FILE *tuple = fopen(file_name, "r+"); // O_TRUNC, O_RDWR
+    FILE *tuple = fopen(file_name, permiso); // O_TRUNC, O_WRONLY, O_CREAT if exists return an error
+                                            // dos hilos no pueden entrar aquí a la vez con el mismo valor de clave
     if (NULL == tuple) {
         perror("ERROR-fopen:");
         return -1;
@@ -36,12 +30,32 @@ int set_value(int key, char *value1, int N_value2, double *V_value2) {
     }
 
     if (-1 == fwrite(V_value2, sizeof(double), 32, tuple)) {
-        perror("ERROR-WRITING doubles: ");
+        perror("ERROR-write doubles: ");
         return -1;
     }
     fclose(tuple);
     return 0;
 
+} 
+
+// la he probado con un minicódigo en c y parece que funciona
+int set_value(int key, char *value1, int N_value2, double *V_value2) {
+    /*validaciones*/
+    if (N_value2 > 32 || N_value2 < 1) {
+        perror("ERROR: N_value 2 out of range");
+    }
+
+    return write_file(key, value1, N_value2, V_value2, "wx");
 }
+
+int modify_value(int key, char *value1, int N_value2, double *V_value2) {
+    /*validaciones*/
+    if (N_value2 > 32 || N_value2 < 1) {
+        perror("ERROR: N_value 2 out of range");
+    }
+
+    return write_file(key, value1, N_value2, V_value2, "r+");
+}
+
 
 
