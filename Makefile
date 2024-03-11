@@ -1,13 +1,15 @@
 
-OBJ=cliente.o servidor.o imp_clave.o claves.o
+OBJ=cliente.o servidor.o imp_clave.o claves.o lib.so
 FLAGS=-g -Wall -lrt
+LIB=-L. -Wl,-rpath=.
 SRC=src/
 
 .PHONY: all clean
 
 all: $(OBJ)
-	gcc $(FLAGS) -o client cliente.o claves.o
-	gcc $(FLAGS) -o server servidor.o imp_clave.o
+	gcc $(FLAGS) $(LIB) -o cliente cliente.o lib.so
+	gcc $(FLAGS) -o servidor servidor.o imp_clave.o
+	@echo -e "\n\033[;32m\033[1mSUCCESS\033[0m\n"
 
 cliente.o: $(SRC)cliente.c 
 	@echo "compiling client..."
@@ -23,8 +25,16 @@ imp_clave.o: $(SRC)imp_clave.c
 
 claves.o: $(SRC)claves.c
 	@echo "compiling tuple..."
-	gcc -c $<
+	gcc -c -fPIC $<
+	
+lib.so: claves.o
+	@echo "generating dinamic library..."
+	gcc -shared -o lib.so $<
+
 
 clean:
 	rm *.o
+
+DonLimpio:
+	rm *.o cliente servidor *.so
 

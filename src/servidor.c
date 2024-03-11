@@ -4,10 +4,12 @@
 #include <signal.h>
 #include <stdlib.h>
 #include "mensajes.h"
+#include "imp_clave.h"
 
 mqd_t server;
 void stop_server()
 {
+    printf("Cerrando servidor...\n");
     mq_close(server);
     mq_unlink("/SERVIDOR");
     exit(0);
@@ -65,10 +67,19 @@ int main(int argc, char *argv[])
 
     server = mq_open("/SERVIDOR", O_CREAT | O_RDONLY, 0700, &attr);
 
-    while(!!1){
+    double v[] = {-1.0, 3.14, 7.65};
+    char s[] = "Hello world"; 
+    
+    set_value(1, s, 3, v);
+
+   
+
+    while(!!1) { 
         peticion p; 
         mq_receive(server, (char*)&p, sizeof(peticion), NULL);
         tratar_peticion(&p);
+        
+
 
     }
 
