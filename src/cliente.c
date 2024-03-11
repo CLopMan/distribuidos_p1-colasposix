@@ -7,9 +7,9 @@ int main(int argc, char *argv[]) {
     char cd[] = "cd";
     init();
     set_value(3, cd, 3, tres);
-    set_value(3, cd, 3, tres);
-    set_value(3, cd, 3, tres);
-    set_value(3, cd, 3, tres);
+    set_value(4, cd, 3, tres);
+    set_value(5, cd, 3, tres);
+    set_value(6, cd, 3, tres);
     get_value(3,cd,&N, tres);
     modify_value(3, cd, 3, tres);
     modify_value(3, cd, 3, tres);

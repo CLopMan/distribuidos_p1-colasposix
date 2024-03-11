@@ -21,32 +21,33 @@ int tratar_peticion(peticion *p){
 
     switch (local_peticion.op)
     {
-    case 0:
+    case 0: // init
         printf("Init\n");
         break;
 
-    case 1:
-        printf("Set Value\n");
+    case 1: // set value
+        //printf("Set Value\n");
+        set_value(local_peticion.key, local_peticion.value1, local_peticion.N_i, local_peticion.value2);
         break;
 
-    case 2:
+    case 2: // get value
         printf("Get Value\n");
         break;
     
-    case 3:
+    case 3: // modify value
         printf("Modify Value\n");
         break;
 
-    case 4:
+    case 4: // delete key
         printf("Delete Key\n");
         break;
 
-    case 5:
+    case 5: // exists
         printf("Exists\n");
         break;
 
     default:
-        printf("XD");
+        fprintf(stderr, "Not recognised operation: expected [0, 5] but %d was received\n", local_peticion.op);
         break;
     }
     r.success = 0;
