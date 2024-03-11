@@ -2,9 +2,7 @@
 
 #define MENSAJE_H
 
-
-#define CHAR_SIZE 256
-#define ARR_SIZE 32
+#include "const.h"
 
 
 typedef struct __peticion {
