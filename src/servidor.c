@@ -9,6 +9,7 @@
 mqd_t server;
 void stop_server()
 {
+    printf("Cerrando servidor...\n");
     mq_close(server);
     mq_unlink("/SERVIDOR");
     exit(0);

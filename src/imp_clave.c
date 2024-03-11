@@ -45,7 +45,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2) {
         perror("ERROR: N_value 2 out of range");
     }
 
-    return write_file(key, value1, N_value2, V_value2, "wx");
+    return write_file(key, value1, N_value2, V_value2, "wx\0");
 }
 
 int modify_value(int key, char *value1, int N_value2, double *V_value2) {
@@ -54,7 +54,7 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2) {
         perror("ERROR: N_value 2 out of range");
     }
 
-    return write_file(key, value1, N_value2, V_value2, "r+");
+    return write_file(key, value1, N_value2, V_value2, "r+\0");
 }
 
 

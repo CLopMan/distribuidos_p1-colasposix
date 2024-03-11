@@ -5,6 +5,7 @@
 #include "claves.h"
 #include "mensajes.h"
 
+
 mqd_t crear_cola(char name[CHAR_SIZE]) {
     printf("%s\n", name);
     char local_name[CHAR_SIZE];

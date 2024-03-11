@@ -1,12 +1,14 @@
 
 OBJ=cliente.o servidor.o imp_clave.o claves.o
 FLAGS=-g -Wall -lrt
+LIB=-L. -Wl,-rpath=.
 SRC=src/
 
 .PHONY: all clean
 
 all: $(OBJ)
-	gcc $(FLAGS) -o client cliente.o claves.o
+	gcc $(FLAGS) $(LIB) -o client cliente.o lib.so
+	gcc $(FLAGS) -o client2 cliente.o claves.o
 	gcc $(FLAGS) -o server servidor.o imp_clave.o
 
 cliente.o: $(SRC)cliente.c 
@@ -23,8 +25,16 @@ imp_clave.o: $(SRC)imp_clave.c
 
 claves.o: $(SRC)claves.c
 	@echo "compiling tuple..."
-	gcc -c $<
+	gcc -c -fPIC $<
+	
+lib.so: claves.o
+	@echo "generating dinamic library..."
+	gcc -shared -o lib.so $<
+
 
 clean:
 	rm *.o
+
+DonLimpio:
+	rm *.o cliente servidor *.so
 
