@@ -1,5 +1,5 @@
 
-OBJ=cliente.o servidor.o imp_clave.o claves.o
+OBJ=cliente.o servidor.o imp_clave.o claves.o lib.so
 FLAGS=-g -Wall -lrt
 LIB=-L. -Wl,-rpath=.
 SRC=src/
@@ -7,9 +7,9 @@ SRC=src/
 .PHONY: all clean
 
 all: $(OBJ)
-	gcc $(FLAGS) $(LIB) -o client cliente.o lib.so
-	gcc $(FLAGS) -o client2 cliente.o claves.o
-	gcc $(FLAGS) -o server servidor.o imp_clave.o
+	gcc $(FLAGS) $(LIB) -o cliente cliente.o lib.so
+	gcc $(FLAGS) -o servidor servidor.o imp_clave.o
+	@echo -e "\n\033[;32m\033[1mSUCCESS\033[0m\n"
 
 cliente.o: $(SRC)cliente.c 
 	@echo "compiling client..."

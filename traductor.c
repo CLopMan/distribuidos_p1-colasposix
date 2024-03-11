@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     texto[256] = '\0';
     printf("Texto: %s\n", texto);
 
-    // Leer el entero de 4 bytes (asumiendo formato little-endian)
+    // Leer el entero de 4 bytes
     int32_t entero;
     fread(&entero, sizeof(int32_t), 1, archivo);
     printf("Entero: %d\n", entero);
@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 
     printf("Valores de punto flotante:\n");
     for (int i = 0; i < 32; ++i) {
-        printf("%lf\n", valores[i]);
+        printf("\t%lf\n", valores[i]);
     }
 
     fclose(archivo);
