@@ -44,11 +44,14 @@
 \newpage
 \section{Introducción}
 \label{sec:introduccion}
-Tu contenido de la sección de introducción.
+El desarrollo de este proyecto consiste en implementar una aplicación cliente-servidor, donde los diferentes clientes podrán guardar información en tuplas a través del servidor, de forma transparente. Para que esto pueda darse se pide que la comunicación entre los clientes y el servidor se de a través de colas POSIX.
+Es importante destacar que para el tratamiento de las solicitudes el servidor será concurrente, utilizando hilos.
 
 \section{Diseño}
 \label{sec:disenno}
-Tu contenido de la sección de desarrollo.
+La aplicación constará de dos partes diferenciadas: los clientes y el servidor.
+
+El cliente estará formado por dos partes, el main de cliente, que corresponde con el fichero "/src/cliente.c", y la comunicación con el servidor, que corresponde con el fichero "/src/clave.c".
 \subsection{Mensajes}
 \label{subsec:mensajes}
 Aquí explicar los argumentos de entrada y salida que nos llevan a desarrollar las estructuras que hemos usado.

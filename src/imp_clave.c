@@ -2,6 +2,10 @@
 #include "const.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <stdlib.h>
 
 /*Estructura de fichero
 char [256]
@@ -9,10 +13,42 @@ N_value [4]
 double[32*8]
 */
 
+int init() {
+    DIR* dir;
+    struct dirent* entrada;
+
+    dir = opendir("tuples");
+
+    if (dir == NULL) {
+        if (-1 == mkdir("tuples", 0700)) {
+            perror("Error al crear el directorio:");
+            return -1;
+        }
+    }
+    else {
+        while ((entrada = readdir(dir)) != NULL) {
+            if (entrada->d_type == DT_REG) {  // Si es un archivo regular
+                char ruta_archivo[1024];
+                snprintf(ruta_archivo, sizeof(ruta_archivo), "%s/%s", "tuples", entrada->d_name);
+
+                if (remove(ruta_archivo) == 0) {
+                    printf("Se ha eliminado el archivo: %s\n", ruta_archivo);
+                }
+                else {
+                    perror("Error al eliminar el archivo");
+                }
+            }
+        }
+    }
+
+    closedir(dir);
+
+}
+
 int write_file(int key, char* value1, int N_value2, double* V_value2, char permiso[4]) {
 
     char file_name[32];
-    sprintf(file_name, "%d.tuple", key);
+    sprintf(file_name, "./tuples/%i.tuple", key);
 
     FILE* tuple = fopen(file_name, permiso); // O_TRUNC, O_WRONLY, O_CREAT if exists return an error
     // dos hilos no pueden entrar aquí a la vez con el mismo valor de clave
@@ -40,7 +76,7 @@ int write_file(int key, char* value1, int N_value2, double* V_value2, char permi
 }
 
 // la he probado con un minicódigo en c y parece que funciona
-int set_value(int key, char *value1, int N_value2, double *V_value2) {
+int set_value(int key, char* value1, int N_value2, double* V_value2) {
     /*validaciones*/
     if (N_value2 > 32 || N_value2 < 1) {
         perror("ERROR: N_value 2 out of range");
@@ -49,7 +85,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2) {
     return write_file(key, value1, N_value2, V_value2, "wx\0");
 }
 
-int modify_value(int key, char *value1, int N_value2, double *V_value2) {
+int modify_value(int key, char* value1, int N_value2, double* V_value2) {
     /*validaciones*/
     if (N_value2 > 32 || N_value2 < 1) {
         perror("ERROR: N_value 2 out of range");
@@ -61,7 +97,7 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2) {
 int get_value(int key, char* value1, int* N_value2, double* V_value2) {
     // Abrir el fichero si existe
     char filename[20];
-    if (-1 == sprintf(filename, "%i.tuple", key)) {
+    if (-1 == sprintf(filename, "./tuples/%i.tuple", key)) {
         perror("Error formateando el nombre del fichero:");
         return -1;
     }
@@ -90,7 +126,7 @@ int get_value(int key, char* value1, int* N_value2, double* V_value2) {
 
 int delete_key(int key) {
     char filename[20];
-    if (-1 == sprintf(filename, "%i.tuple", key)) {
+    if (-1 == sprintf(filename, "./tuples/%i.tuple", key)) {
         perror("Error formateando el nombre del fichero:");
         return -1;
     }
@@ -99,7 +135,7 @@ int delete_key(int key) {
 
 int exist(int key) {
     char filename[20];
-    if (-1 == sprintf(filename, "%i.tuple", key)) {
+    if (-1 == sprintf(filename, "./tuples/%i.tuple", key)) {
         perror("Error formateando el nombre del fichero:");
         return -1;
     }
