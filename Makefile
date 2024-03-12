@@ -36,5 +36,5 @@ clean:
 	rm *.o
 
 DonLimpio:
-	rm *.o cliente servidor *.so
+	rm *.o cliente servidor *.so *.tuple
 
