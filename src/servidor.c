@@ -26,12 +26,13 @@ int tratar_peticion(peticion *p){
         break;
 
     case 1: // set value
-        //printf("Set Value\n");
-        set_value(local_peticion.key, local_peticion.value1, local_peticion.N_i, local_peticion.value2);
+        printf("Set Value\n");
+        r.success = set_value(local_peticion.key, local_peticion.value1, local_peticion.N_i, local_peticion.value2);
         break;
 
     case 2: // get value
         printf("Get Value\n");
+        r.success = get_value(local_peticion.key, local_peticion.value1, &r.N, local_peticion.value2);
         break;
     
     case 3: // modify value
@@ -50,8 +51,7 @@ int tratar_peticion(peticion *p){
         fprintf(stderr, "Not recognised operation: expected [0, 5] but %d was received\n", local_peticion.op);
         break;
     }
-    r.success = 0;
-    mqd_t client = mq_open(p->q_client, O_WRONLY);
+    mqd_t client = mq_open(local_peticion.q_client, O_WRONLY);
     mq_send(client, (char*)&r, sizeof(respuesta), 0);
 }
 

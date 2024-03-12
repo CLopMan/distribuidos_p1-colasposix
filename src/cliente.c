@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
     set_value(5, cd, 3, tres);
     set_value(6, cd, 3, tres);
     get_value(3,cd,&N, tres);
+    printf(">>%d\n", N);
     modify_value(3, cd, 3, tres);
     modify_value(3, cd, 3, tres);
     modify_value(3, cd, 3, tres);

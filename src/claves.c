@@ -7,7 +7,7 @@
 
 
 mqd_t crear_cola(char name[CHAR_SIZE]) {
-    printf("%s\n", name);
+    //printf("%s\n", name);
     char local_name[CHAR_SIZE];
     strcpy(local_name, name);
     struct mq_attr attr;
@@ -16,9 +16,7 @@ mqd_t crear_cola(char name[CHAR_SIZE]) {
     attr.mq_maxmsg = 1;
     attr.mq_msgsize = sizeof(respuesta);
     mqd_t queue = mq_open(local_name, O_CREAT | O_RDONLY, 0777, &attr);
-    if ((mqd_t) -1 == queue) {
-        printf("pitopausia\n");
-    }
+
     return queue;
 }
 
@@ -44,7 +42,7 @@ int hacer_peticion(char *queue_name, peticion *p, respuesta *r) {
     }
 
     // recibir petición 
-    printf("recibiendo petición\n");
+    //printf("recibiendo petición\n");
     if (-1 == mq_receive(yo, (char*)r, sizeof(respuesta), NULL)) {
         perror("Error: recibir");
         return -1;
@@ -122,7 +120,9 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2) {
     for (int i = 0; i < r.N; ++i) {
         V_value2[i] = r.value2[i];
     }
+
     strcpy(value1, r.value1);
+
    
     return r.success;
 
@@ -185,7 +185,6 @@ int exist(int key){
     strcpy(p.q_client, queue_name);
 
     if(-1 == hacer_peticion(queue_name, &p, &r)){
-        perror("Error:");
         return -1;
     }
 
