@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.3)  12 MAR 2024 15:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.3)  13 MAR 2024 08:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -325,27 +325,126 @@ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.44 \newpage
-              [1] [2] (./report.aux)
+              [1]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.59 ...tación de las tuplas, es decir "/src/imp_
+                                                  clave.c".
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 En cuanto a la parte de comunicació
+                                         n con el cliente, el servidor abre ...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 ...En el momento en el que llega una petició
+                                                  n el servidor analizará l...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 ...llega una petición el servidor analizará
+                                                   la petición y llamará a...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 ...tición el servidor analizará la petició
+                                                  n y llamará a la funciona...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 ...ervidor analizará la petición y llamará
+                                                   a la funcionalidad que el...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 60.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.60 ...uncionalidad se haya realizado se volcará
+                                                   en contenido de respuesta...
+
+? 
+
+LaTeX Warning: Command \' invalid in math mode on input line 61.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ... \let \ignorespaces \relax \accent 
+                                                  #1 #2\egroup \ifmmode \els...
+l.61 Para la implenetació
+                          n de las distintas funcionalidades se ha optado po...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.63 \subsection
+                {Mensajes}
+? 
+
+Overfull \hbox (2726.16238pt too wide) in paragraph at lines 59--63
+\OT1/cmr/m/n/10 "/src/imp$[]\OML/cmm/m/it/10 lave:c\OT1/cmr/m/n/10 "\OML/cmm/m/
+it/10 :Encuantoalapartedecomunicaci[]nconelcliente; elservidorabresucolaPOSIXye
+speradeformaindefinidaaquelosclientesrealicensuspeticiones:Enelmomentoenelquell
+egaunapetici[]nelservidoranalizar[]lapetici[]nyllamar[]alafuncionalidadqueelcli
+entehayapedido:Cuandolafuncionalidadsehayarealizadosevolcar[]encontenidoderespu
+estaenlacoladecliente:Paralaimplenetaci[]ndelasdistintasfuncionalidadessehaopta
+doporguardarlastuplasenficheros; loquenospermiteaccederalastuplasendistintasses
+iones; yaqueseguardanenlamemoriapermanente:Parapodercrearydestruirsimplementecr
+eamoslosficherosylosborramos; yparaleeryescribirabrimoselficheroyvolcamoslosdat
+osdemanerabinaria:$ 
+ []
+
+[2] (./report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 0A887577DF4DCFB0B7BE604F5E090288;779.
  ) 
 Here is how much of TeX's memory you used:
- 8627 strings out of 480247
- 135858 string characters out of 5896152
- 428581 words of memory out of 5000000
- 26483 multiletter control sequences out of 15000+600000
+ 8628 strings out of 480247
+ 135866 string characters out of 5896152
+ 432581 words of memory out of 5000000
+ 26484 multiletter control sequences out of 15000+600000
  471383 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,5n,63p,356b,373s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,5n,63p,420b,373s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on report.pdf (3 pages, 127204 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr17.pfb>
+Output written on report.pdf (3 pages, 150587 bytes).
 PDF statistics:
- 85 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
+ 95 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
  11 named destinations out of 1000 (max. 500000)
  62 words of extra memory for PDF output out of 10000 (max. 10000000)
 
