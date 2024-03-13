@@ -4,6 +4,8 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+%\usepackage{enumitem}
+
 
 \lstset{
   language=C,
@@ -82,27 +84,50 @@ gcc -c -fPIC -shared -o lib.so claves.c
 \end{lstlisting}
 \end{center}
 
-El  cliente podrá llamar a las  las diferentes funciones ofrecidas por la interfaz, de esta manera se podrá interactuar con las distintas tuplas almacenadas. Los servicios, no obstante,  estarán implementados en el servidor de forma transparente al usuario.
-
+El  cliente podrá llamar a las  las diferentes funciones ofrecidas por la interfaz, de esta manera se podrá interactuar con las distintas tuplas almacenadas. Los servicios, no obstante, estarán implementados en el servidor de forma transparente al usuario.
 En esta implementación cada cliente creará una peticición que corresponda con la funcionalidad invocada y creará una cola POSIX que le corresponde, donde se recibirá la respuesta, y abrirá la cola POSIX que le corresponde al servidor, donde volcará su petición y procederá a esperar la respuesta.
 
+\subsection{Servidor}
+\label{subsec:servidor}
 En el servidor se encuentran las funcionalidades que se encargan de la comunicación con el cliente, es decir \textit{src/servidor.c}, y la correspondiente implementación de las tuplas, es decir \textit{src/imp\_clave.c}.
+
+\subsubsection{Estructura del Servidor}
+\label{subsec::estructura_servidor}
 En cuanto a la parte de comunicación con el cliente, el servidor abre su cola POSIX y espera de forma indefinida a que los clientes realicen sus peticiones. En el momento en el que llega una petición el servidor analizará la petición y llamará a la funcionalidad que el cliente haya pedido. Cuando la funcionalidad se haya realizado se volcará en contenido de respuesta en la cola de cliente.
 Para la implenetación de las distintas funcionalidades se ha optado por guardar las tuplas en ficheros, lo que nos permite acceder a las tuplas en distintas sesiones, ya que se guardan en la memoria permanente.
 Para poder crear y destruir simplemente creamos los ficheros y los borramos, y para leer y escribir abrimos el fichero y volcamos los datos de manera binaria.
 
+\subsubsection{Concurrencia del Servidor}
+\label{subsec::concurrencia_servidor}
+
 
 \subsection{Mensajes}
 \label{subsec:mensajes}
-Aquí explicar los argumentos de entrada y salida que nos llevan a desarrollar las estructuras que hemos usado.
+Para el proceso de comunicación necesitamos realizar un paso de mensajes, que se vuelquen en las correspondientes colas POSIX. Para almacenar distintos valores los mensajes utilizan arrays ya que para no pueden usarse punteros debido a que los mensajes viajarán entre procesos y por lo tanto no pueden referirse a la memoria de un proceso en concreto.
+Para ello se han construido 2 estructuras: la petición y la respuesta
+\subsubsection{Petición}
+\label{subsec::peticion}
+Para construir la peticición nos hemos basado en los argumentos de entrada que tenían todos los prototipos de las funciones. A continuación nos pararemos en cada uno de los atributos de la estructura.
+
+%\begin{itemize}
+  % \textit{q_client}: Este atributo es necesario para identificar el nombre de la cola del cliente que ha realizado la petición con el objetivo de que el servidor pueda devolver una respuesta al cliente.
+  % \textit{key}: El valor que corresponde a este atributo se utiliza en las funciones para identificar la tupla de forma inequivoca.
+  %\textit{op}: El valor que se coloca en este atributo corresponde al tipo de función con la que se debe de trabajar
+  % \textit{value1}: El valor que se almacena en este atributo es la cadena que se utiliza como clave en la tupla.
+  % \textit{N_i}: Esta variable de tipo entero se utiliza como longitud para escribir el array de doubles o como índice para leer este array.
+  % \textit{V_value2}: Esta variable almacena el array de doubles que corresponde con el valor que se almacena en las tuplas.
+% \end{itemize}
+
+\subsubsection*{Respuesta}
+\label{subsec::respuesta}
+
+
 
 
 \subsection{Uso de ficheros}
 \label{subsec:uso_de_ficheros}
 
-\subsection{Servidor}
-\label{subsec:servidor}
-Aquí explicar el diseño concurrente del servidor. Donde están los mutex y por qué. Diseño de pool de hilos o hilo por petición. 
+
 
 \section{Descripción de pruebas}
 \label{sec:descripcion_de_pruebas}
