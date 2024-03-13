@@ -1,5 +1,5 @@
 
-OBJ=cliente.o servidor.o imp_clave.o claves.o lib.so
+OBJ=cliente.o servidor.o imp_clave.o lib.so
 FLAGS=-g -Wall -lrt
 LIB=-L. -Wl,-rpath=.
 SRC=src/
@@ -23,13 +23,9 @@ imp_clave.o: $(SRC)imp_clave.c
 	@echo "compiling services..."
 	gcc -c $<
 
-claves.o: $(SRC)claves.c
+lib.so: $(SRC)claves.c
 	@echo "compiling tuple..."
-	gcc -c -fPIC $<
-	
-lib.so: claves.o
-	@echo "generating dinamic library..."
-	gcc -shared -o lib.so $<
+	gcc -c -fPIC -shared -o lib.so $<
 
 
 clean:

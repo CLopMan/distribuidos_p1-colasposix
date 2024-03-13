@@ -2,6 +2,23 @@
 \usepackage{graphicx}
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
 \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  language=C,
+  basicstyle=\ttfamily\small,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{green},
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  showspaces=false,
+  showstringspaces=false,
+  tabsize=2,
+  breaklines=true,
+  captionpos=false,
+}
 
 %title
 \title{Practica 1} 
@@ -42,6 +59,7 @@
 \tableofcontents
 
 \newpage
+
 \section{Introducción}
 \label{sec:introduccion}
 El desarrollo de este proyecto consiste en implementar una aplicación cliente-servidor, donde los diferentes clientes podrán guardar información en tuplas a través del servidor, de forma transparente.
@@ -52,14 +70,28 @@ Es importante destacar que para el tratamiento de las solicitudes el servidor se
 \label{sec:disenno}
 La aplicación constará de dos partes diferenciadas: los clientes y el servidor.
 
-El cliente estará formado por dos partes, el main de cliente, que corresponde con el fichero "/src/cliente.c", y la comunicación con el servidor, que corresponde con el fichero "/src/clave.c", esta última se encontrará en una librería dinámica llamada "lib.so".
-En el main de cliente se podrán realizar las diferentes peticiones que permite la interfaz, de esta manera se podrá interactuar con las distintas tuplas almacenadas. La interfaz que utiliza el main estará implementada en la parte de comunicación con el servidor. 
+\subsection{Cliente y Biblioteca dinámica}
+\label{subsec:cliente_biblioteca}
+El cliente estará formado por dos partes, el main de cliente, que corresponde con el fichero \textit{src/cliente.c}, y la comunicación con el servidor, que corresponde con el fichero \textit{/src/clave.c}. Esta último se compilará como una librería dinámica \textit{lib.so} de forma que la comunicación sea independiente de la implementación de cliente. De esta forma, logramos una aplicación que, en caso de cambiar la forma de comunicación o implementación de los servicios no sea necesario volver a compilar siempre que se respete la interfaz actual. 
+
+Para compilar el archivo \textit{claves.c} se ha empleado el siguiente comando en un archivo \textit{Makefile}.
+
+\begin{center}
+\begin{lstlisting}[caption=Compiación de biblioteca dinámica]
+gcc -c -fPIC -shared -o lib.so claves.c
+\end{lstlisting}
+\end{center}
+
+El  cliente podrá llamar a las  las diferentes funciones ofrecidas por la interfaz, de esta manera se podrá interactuar con las distintas tuplas almacenadas. Los servicios, no obstante,  estarán implementados en el servidor de forma transparente al usuario.
+
 En esta implementación cada cliente creará una peticición que corresponda con la funcionalidad invocada y creará una cola POSIX que le corresponde, donde se recibirá la respuesta, y abrirá la cola POSIX que le corresponde al servidor, donde volcará su petición y procederá a esperar la respuesta.
 
-En el servidor se encuentran las funcionalidades que se encargan de la comunicación con el cliente, es decir "/src/servidor.c", y la correspondiente implementación de las tuplas, es decir "/src/imp_clave.c".
+En el servidor se encuentran las funcionalidades que se encargan de la comunicación con el cliente, es decir \textit{src/servidor.c}, y la correspondiente implementación de las tuplas, es decir \textit{src/imp\_clave.c}.
 En cuanto a la parte de comunicación con el cliente, el servidor abre su cola POSIX y espera de forma indefinida a que los clientes realicen sus peticiones. En el momento en el que llega una petición el servidor analizará la petición y llamará a la funcionalidad que el cliente haya pedido. Cuando la funcionalidad se haya realizado se volcará en contenido de respuesta en la cola de cliente.
 Para la implenetación de las distintas funcionalidades se ha optado por guardar las tuplas en ficheros, lo que nos permite acceder a las tuplas en distintas sesiones, ya que se guardan en la memoria permanente.
 Para poder crear y destruir simplemente creamos los ficheros y los borramos, y para leer y escribir abrimos el fichero y volcamos los datos de manera binaria.
+
+
 \subsection{Mensajes}
 \label{subsec:mensajes}
 Aquí explicar los argumentos de entrada y salida que nos llevan a desarrollar las estructuras que hemos usado.
@@ -67,8 +99,6 @@ Aquí explicar los argumentos de entrada y salida que nos llevan a desarrollar l
 
 \subsection{Uso de ficheros}
 \label{subsec:uso_de_ficheros}
-Aquí explicar cómo hemos usado ficheros como forma de almacenamiento y por qué. Comentar la escritura atómica para buffers pequeños. 
-
 
 \subsection{Servidor}
 \label{subsec:servidor}
