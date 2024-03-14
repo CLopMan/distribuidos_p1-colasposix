@@ -3,13 +3,16 @@ OBJ=cliente.o servidor.o imp_clave.o lib.so
 FLAGS=-g -Wall -lrt
 LIB=-L. -Wl,-rpath=.
 SRC=src/
+EXTRA_CLIENTS=gcc $(FLAGS) $(LIB) -o clientes $(SRC)cliente_set.c lib.so gcc $(FLAGS) $(LIB) -o clienteg $(SRC)cliente_get.c lib.so
 
-.PHONY: all clean
+.PHONY: all clean DonLimpio
 
 all: $(OBJ)
+	@echo -e "\n\0033[;33m\033[1mCOMPILING: GENERATING 2 FILES...\033[0m\n"
 	gcc $(FLAGS) $(LIB) -o cliente cliente.o lib.so
 	gcc $(FLAGS) -o servidor servidor.o imp_clave.o
 	@echo -e "\n\033[;32m\033[1mSUCCESS\033[0m\n"
+	@echo -e "USAGE\n-----\n\t1. First run ./servidor\n\t2. Second, run every client you need (./cliente is given as an example)\nruning an init() it is recommended if first time."
 
 cliente.o: $(SRC)cliente.c 
 	@echo "compiling client..."
@@ -32,5 +35,5 @@ clean:
 	rm *.o
 
 DonLimpio:
-	rm *.o cliente servidor *.so *.tuple
+	rm *.o cliente servidor *.so
 
