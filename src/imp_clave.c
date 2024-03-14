@@ -67,7 +67,7 @@ int write_file(int key, char* value1, int N_value2, double* V_value2, char permi
         return -1;
     }
 
-    if (-1 == fwrite(V_value2, sizeof(double), 32, tuple)) {
+    if (-1 == fwrite(V_value2, sizeof(double), N_value2, tuple)) {
         perror("ERROR-write doubles: ");
         return -1;
     }

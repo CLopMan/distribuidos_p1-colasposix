@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     fread(valores, sizeof(double), 32, archivo);
 
     printf("Valores de punto flotante:\n");
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < entero; ++i) {
         printf("\t%lf\n", valores[i]);
     }
 
