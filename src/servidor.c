@@ -27,9 +27,11 @@ int tratar_peticion(peticion* p) {
 
     pthread_mutex_lock(&mutex);
     // copia de la petición 
+    printf("mutex\n");
     local_peticion.key = p->key;
     local_peticion.N_i = p->N_i;
     local_peticion.op = p->op;
+    printf("copia str\n");
     strcpy(local_peticion.q_client, p->q_client);
     strcpy(local_peticion.value1, p->value1);
     for (int i = 0; i < local_peticion.N_i; ++i) {
@@ -37,11 +39,12 @@ int tratar_peticion(peticion* p) {
     }
     copiado = 1;
     pthread_cond_signal(&cond);
+    printf("end mutex\n");
     pthread_mutex_unlock(&mutex);
 
     // debug
     printf("starting %s: %d\n", local_peticion.q_client, local_peticion.op);
-    printf("petición:\n\tcliente: %s\n\top: %d\n\tvalue1:%s\n", local_peticion.q_client, local_peticion.op, local_peticion.value1);
+    //printf("petición:\n\tcliente: %s\n\top: %d\n\tvalue1:%s\n", local_peticion.q_client, local_peticion.op, local_peticion.value1);
 
 
     switch (local_peticion.op) {

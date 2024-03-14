@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "../src/imp_clave.h"
 
 #define TEST_TUPLE "tuples/0.tuple"
@@ -16,7 +18,8 @@ int main (int argc, char **argv) {
     
     int status;
     int sample_key = 0;
-    char sample_str[] = "HELLO WORLD";
+    char sample_str[256];
+    strcpy(sample_str, "HELLO WORLD");
     double sample_vector[] = {3.14, 2.718, 1.618, 7.98e300};
     int sample_N = 4;
 
@@ -79,7 +82,17 @@ int main (int argc, char **argv) {
 
         break;
     case 2:
-        status = get_value(sample_key, received_str, &received_N, received_vector);
+        // creating file 
+        zero = fopen("tuples/1.tuple", "w");
+        if (zero == NULL) {printf("error: creando archivo");}
+        int n = fwrite(sample_str, 1, 256, zero);
+        fwrite(&sample_N, sizeof(int), 1, zero);
+        fwrite(sample_vector, sizeof(double), sample_N, zero);
+
+        strcpy(received_str,"");
+        fclose(zero);
+
+        status = get_value(1, received_str, &received_N, received_vector);
         if (strcmp(received_str, sample_str) != 0) {
             fprintf(stderr, "Error: received string doesn't match expected\n>%s\n<%s\n", sample_str, received_str);
             return -1;
@@ -145,9 +158,15 @@ int main (int argc, char **argv) {
         break;
     case 4:
         status = exist(0);
-        if (status != 1) perror("Error: the file exists but it was evaluated as non-existing\n");
-        status = exist(1);
-        if (status != 0) perror("Error: the file does not exists but it was evaluated as existing\n");
+        if (status != 1) {
+            perror("Error: the file exists but it was evaluated as non-existing\n");
+            return -1;
+        }
+        status = exist(2);
+        if (status != 0) {
+            perror("Error: the file does not exists but it was evaluated as existing\n");
+            return -1;
+        }
         break;
     case 5:
         status = delete_key(sample_key);
@@ -160,7 +179,7 @@ int main (int argc, char **argv) {
         }
 
         // deleting non-existing file 
-        status = delete_key(1);
+        status = delete_key(2);
         if(status != -1) {
             fprintf(stderr, "Error: return value was %d when -1 was spected\n", status);
             return -1;
