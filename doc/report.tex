@@ -4,7 +4,6 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
-%\usepackage{enumitem}
 
 
 \lstset{
@@ -97,47 +96,72 @@ En cuanto a la parte de comunicación con el cliente, el servidor abre su cola P
 Para la implenetación de las distintas funcionalidades se ha optado por guardar las tuplas en ficheros, lo que nos permite acceder a las tuplas en distintas sesiones, ya que se guardan en la memoria permanente.
 Para poder crear y destruir simplemente creamos los ficheros y los borramos, y para leer y escribir abrimos el fichero y volcamos los datos de manera binaria.
 
+\subsubsection*{Implementación en el servidor}
+\label{subsec::implementacion_servidor}
+Como hemos mencionado las tuplas se almacenan en ficheros, por lo que la implementación se basará en las interfaces que C nos proporciona para gestionar ficheros.
+Vamos a profundizar cómo hemos usado estas interfaces durante la implementación de cada una de las funciones:
+
+\begin{itemize}
+  \item \texttt{init()}: Para la función \textit{init} creamos el directorio \textit{tuple}, en el que se encontrarán todas las tuplas, en caso de que no exista y en el caso de que exista se utilizan 
+  \item \texttt{set\_value()}: Para la función \textit{set\_value} escribimos en este orden la clave, el string, el tamaño del array y el array de doubles siempre y cuando no exista la tupla que corresponda con la clave proporcionada, a traveś de \textit{fwrite}.
+  \item \texttt{modify\_value()}: Para la función \textit{modify\_value} escribimos en el mismo orden que para \textit{set\_value} pero siempre y cuando exista la tupla que corresponde con la clave proporcionada, a traveś de \textit{fwrite}.
+  \item \texttt{get\_value()}: La función \textit{get\_value} realiza la lectura de la misma manera que ocurre en el \textit{modify\_value} pero en vez de utilizar \textit{fwrite} utilizamos \textit{fread} para leer todo el fichero
+  \item \texttt{delete\_key()}: La función \textit{delete\_key} realiza un unlink del fichero que corresponde con la clave proporcionada
+  \item \texttt{exist()}: La función \textit{exist} trata de abrir un archivo con permisos de lectura y si consigue hacerlo devuelve un 1, en caso de no poder hacerlo devuelve un 0
+\end{itemize}
+
+
 \subsubsection{Concurrencia del Servidor}
 \label{subsec::concurrencia_servidor}
+Para la concurrencia del servidor se utilizan hilos por petición, lo que significa que existe un hilo principal que acepta las peticiones y crea hilos para gestionar estas peticiones.
+Tras crear un hilo principal se duerme hasta que el hilo creado tome el mutex y copie los valores de la petición recibida.
 
-
+Existen secciones críticas en los ficheros, pero no se van a dar condiciones de carrera debido a que las escrituras son más pequeñas que el buffer de escritura de los ficheros. Además, el sistema operativo se encargará de gestionar a los hilos para que no haya entrelazamiento de escrituras simultáneas dado que los ficheros son más pequeños que una página.
 \subsection{Mensajes}
 \label{subsec:mensajes}
 Para el proceso de comunicación necesitamos realizar un paso de mensajes, que se vuelquen en las correspondientes colas POSIX. Para almacenar distintos valores los mensajes utilizan arrays ya que para no pueden usarse punteros debido a que los mensajes viajarán entre procesos y por lo tanto no pueden referirse a la memoria de un proceso en concreto.
 Para ello se han construido 2 estructuras: la petición y la respuesta
+
 \subsubsection{Petición}
 \label{subsec::peticion}
 Para construir la peticición nos hemos basado en los argumentos de entrada que tenían todos los prototipos de las funciones. A continuación nos pararemos en cada uno de los atributos de la estructura.
 
 \begin{itemize}
-  \item  \textit{q\_client}: Este atributo es necesario para identificar el nombre de la cola del cliente que ha realizado la petición con el objetivo de que el servidor pueda devolver una respuesta al cliente.
-  \item  \textit{key}: El valor que corresponde a este atributo se utiliza en las funciones para identificar la tupla de forma inequivoca.
+  \item \textit{q\_client}: Este atributo es necesario para identificar el nombre de la cola del cliente que ha realizado la petición con el objetivo de que el servidor pueda devolver una respuesta al cliente.
+  \item \textit{key}: El valor que corresponde a este atributo se utiliza en las funciones para identificar la tupla de forma inequivoca.
   \item \textit{op}: El valor que se coloca en este atributo corresponde al tipo de función con la que se debe de trabajar
-  \item \textit{value1}: El valor que se almacena en este atributo es la cadena que se utiliza como clave en la tupla.
+  \item \textit{value1}: El valor que se almacena en este atributo es la cadena que se almacena en la tupla.
   \item \textit{N\_i}: Esta variable de tipo entero se utiliza como longitud para escribir el array de doubles o como índice para leer este array.
  \item \textit{V\_value2}: Esta variable almacena el array de doubles que corresponde con el valor que se almacena en las tuplas.
 \end{itemize}
 
-\subsubsection*{Respuesta}
+\subsubsection{Respuesta}
 \label{subsec::respuesta}
+Para construir la respuesta nos hemos basado en los valores que devuelven las funciones. A continuación profundizaremos en cada atributo de la respuesta.
 
-
-
+\begin{itemize}
+  \item \textit{success}: El valor que contendrá este atributo será un 0 en caso de que la función se haya completado con éxito o un -1 en caso de error
+  \item \textit{value1}: Este atributo se usará para la función \textit{get\_value} con el objetivo de devolver el string de la tupla consultada
+  \item \textit{value2}: Este atributo se usará para devolver el array de doubles de la tupla consultada a través de la función \textit{get\_value}
+  \item \textit{n}: Este atributo contendrá el tamaño del array de doubles de la tupla consultada cuando se llama a la función \textit{get\_value}
+\end{itemize}
 
 \subsection{Uso de ficheros}
 \label{subsec:uso_de_ficheros}
-
+Para almacenar las tuplas se han utilizado ficheros. Hemos decidido que estos ficheros sean binarios, ya que conocemos a la perfección la estructura que tendrán estos ficheros.
+De esta manera no es necesario analizar la estructura de estos, sino que simplemente hay que leer y escribir lo que es necesario.
+Dado el carácter de los ficheros, nos permite mantener el contenido de las tuplas entre distintas ejecuciones del servidor. 
 
 
 \section{Descripción de pruebas}
 \label{sec:descripcion_de_pruebas}
 Pruebas que hemos ejecutado sobre nuestra aplicación: ejecución con varios clientes, validación de las funciones... Creo que lo mejor sería dividirlo en subsecciones, una para cada función, otra para las comunicaciones y otra para la concurrencia. 
 
-
-
 \section{Conclusiones}
 \label{sec:conclusiones}
-Escribimos aquí
+Durante el desarrollo de esta práctica hemos comprendido el funcionamiento de una aplicación distribuida constituida por varios clientes y un servidor.
+Para ello nos hemos visto en la necesidad de desarrollar el código modular para que tanto el servidor como el cliente tenga su parte de comunicaciones y su parte de implementación.
+
 
 
 \end{document}
