@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <stdlib.h>
+#include <unistd.h>
 #include "claves.h"
 
 int main(int argc, char* argv[]) {
@@ -14,15 +15,15 @@ int main(int argc, char* argv[]) {
 
     printf("INIT:\n");
     init();
-    sleep(5);
+    sleep(1);
 
     int retorno = -1; 
     retorno = set_value(3, cd, 3, tres);
     printf("first set: %d\n", retorno); 
-    sleep(5);
+    sleep(1);
     retorno = set_value(9, cd, 3, tres);
     printf("snd set: %d\n", retorno);
-    sleep(5);
+    sleep(1);
 
 
     get_value(3, texto, &rn, rvec);
@@ -32,7 +33,7 @@ int main(int argc, char* argv[]) {
     }
     printf("\n");
 
-    sleep(5);
+    sleep(1);
     
     modify_value(3, hello, 5, vec5);
     printf("hey \n");
