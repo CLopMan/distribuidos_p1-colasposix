@@ -10,16 +10,10 @@ int test_one_client() {
     int i = 0;
     int pid = fork();
     if (pid == 0) {
-        /*while( i < 5) {
-
-            pid = fork();
-            if (pid != 0) break;
-            
-            ++i;
-        }*/
         execl("./cliente", "");
     }
     wait(NULL);
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
