@@ -26,20 +26,24 @@ int tratar_peticion(peticion* p) {
     respuesta r;
 
     pthread_mutex_lock(&mutex);
+    
     // copia de la petición 
-    printf("mutex\n");
     local_peticion.key = p->key;
     local_peticion.N_i = p->N_i;
     local_peticion.op = p->op;
-    printf("copia str\n");
     strcpy(local_peticion.q_client, p->q_client);
     strcpy(local_peticion.value1, p->value1);
-    printf("-----\n");
-    
-    printf("----\n");
     copiado = 1;
     pthread_cond_signal(&cond);
     printf("end mutex\n");
+
+    if (p->op == 1 || p->op == 3) // sólo debemos copiar el servidor para el set o modify
+    { 
+        for (int i = 0; i < local_peticion.N_i; ++i) {
+            local_peticion.value2[i] = p->value2[i];
+        }
+    }    
+
     pthread_mutex_unlock(&mutex);
 
     // debug
@@ -56,9 +60,7 @@ int tratar_peticion(peticion* p) {
     case 1: // set value
         //sleep(10);
         //printf("%s, Set Value\n", local_peticion.q_client);
-        for (int i = 0; i < local_peticion.N_i; ++i) {
-            local_peticion.value2[i] = p->value2[i];
-        }
+        
         r.success = set_value(local_peticion.key, local_peticion.value1, local_peticion.N_i, local_peticion.value2);
         break;
 
@@ -70,9 +72,7 @@ int tratar_peticion(peticion* p) {
 
     case 3: // modify value
         /* printf("Modify Value\n"); */
-        for (int i = 0; i < local_peticion.N_i; ++i) {
-            local_peticion.value2[i] = p->value2[i];
-        }
+        
         r.success = modify_value(local_peticion.key, local_peticion.value1, local_peticion.N_i, local_peticion.value2);
         break;
 
