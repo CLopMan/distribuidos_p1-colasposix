@@ -5,7 +5,7 @@ LIB=-L. -Wl,-rpath=.
 SRC=src/
 EXTRA_CLIENTS=gcc $(FLAGS) $(LIB) -o clientes $(SRC)cliente_set.c lib.so gcc $(FLAGS) $(LIB) -o clienteg $(SRC)cliente_get.c lib.so
 
-.PHONY: all clean DonLimpio
+.PHONY: all clean DonLimpio testing
 
 all: $(OBJ)
 	@echo -e "\n\0033[;33m\033[1mCOMPILING: GENERATING 2 FILES...\033[0m\n"
@@ -30,10 +30,16 @@ lib.so: $(SRC)claves.c
 	@echo "compiling tuple..."
 	gcc -c -fPIC -shared -o lib.so $<
 
+testing: imp_clave.o tests/tests_imp.c tests/custom_client.c lib.so tests/traductor.c
+	gcc -o tests_imp tests/tests_imp.c imp_clave.o
+	gcc $(FLAGS) -o tests_concurrency tests/tests_concurrency.c 
+	gcc $(FLAGS) $(LIB) -o custom_client tests/custom_client.c lib.so
+	gcc $(FLAGS) -o traductor tests/traductor.c
+	@bash tests/test_imp.sh
 
 clean:
 	rm *.o
 
 DonLimpio:
-	rm *.o cliente servidor *.so
+	rm *.o cliente servidor *.so tests_imp traductor tests_concurrency *.txt custom_client
 
