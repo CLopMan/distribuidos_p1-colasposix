@@ -35,7 +35,6 @@ int tratar_peticion(peticion* p) {
     strcpy(local_peticion.value1, p->value1);
     copiado = 1;
     pthread_cond_signal(&cond);
-    printf("end mutex\n");
 
     if (p->op == 1 || p->op == 3) // sólo debemos copiar el servidor para el set o modify
     { 

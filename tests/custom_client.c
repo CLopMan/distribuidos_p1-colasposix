@@ -47,7 +47,12 @@ int main(int argc, char *argv[]) {
         status = set_value(sample_key, sample_str, sample_N, sample_vector);
         break;
     case 2:
-        get_value(sample_key, received_str, &received_N, received_vector);
+        status = get_value(sample_key, received_str, &received_N, received_vector);
+        printf("get_value:\n\ttexto: %s\n\tN: %d\n\tdoubles:", received_str, received_N);
+        for (int i = 0; i < received_N; ++i) {
+            printf("\n\t\t[%d]: %lf", i, received_vector[i]); 
+        }
+        printf("\n");
         break;
     case 3:
         status = modify_value(sample_key, Bsample_str, Bsample_N, Bsample_vector);
@@ -62,7 +67,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "ERROR: unrecognised op code (%d)", argument);
         return -1;
     }
-    printf("status: %d\n", status);
+    //printf(">>Client_%d end status: %d\n", getpid(), status);
 
     return 0; 
 }

@@ -66,6 +66,70 @@ int test_two_creating_same_file() {
     return 0;
 }
 
+int test_one_reading_one_writing(int wdelay) {
+    printf("Tests 4: escritor-lector\n");
+    int pid1, pid2;
+
+    pid1 = fork();
+    if (pid1 != 0) {
+        pid2 = fork();
+    } else {
+        sleep(wdelay);
+        execl("./custom_client", "0", "3", NULL);
+    }
+
+    if (pid2 == 0) {
+        execl("./custom_client", "0", "2", NULL);
+    }
+
+    pid_t last = -1;
+    for (int i = 0; i < 2; ++i) {
+       last = wait(NULL);
+    }
+    return last;
+
+}
+
+int test_MAX_CHILDS_clients_writing() {
+    printf("Tests 2: 2 escritores\n");
+    int i = MAX_CHILDS;
+    pid_t pid = 1;
+    while (i--) {
+        if (0 == pid) {
+            execl("./custom_client", "0", "3", NULL);
+        } else {
+            pid = fork();
+        }
+    }
+    pid_t last = -1;
+    for (int i = 0; i < MAX_CHILDS; ++i) {
+       last = wait(NULL);
+    }
+    return last;
+}
+
+int test_MAX_CHILDS_wr() {
+    printf("Tests 2: 2 escritores\n");
+    int i = MAX_CHILDS;
+    pid_t pid = 1;
+    while (i--) {
+        if (0 == pid) {
+            if (i%2) {
+                execl("./custom_client", "0", "2", NULL);
+            } else {
+                execl("./custom_client", "0", "3", NULL);
+            }
+        } else {
+            pid = fork();
+        }
+    }
+    pid_t last = -1;
+    for (int i = 0; i < MAX_CHILDS; ++i) {
+       last = wait(NULL);
+    }
+    return last;
+}
+
 int main(int argc, char *argv[]) {
     test_one_client(); // comunicaicón correcta
     //setup: creating 0.tuple
@@ -86,7 +150,7 @@ int main(int argc, char *argv[]) {
     char file[512];
     char autor[512];
     sprintf(file, "tuples/%d.tuple", 0);
-    sprintf(autor, "Client_%d.txt", last);
+    sprintf(autor, "test_result-Client_%d.txt", last);
     traductor(file, autor);
 
 
@@ -99,9 +163,10 @@ int main(int argc, char *argv[]) {
         wait(NULL);
     }
     test_two_creating_same_file();
-    //test_one_reading_one_writing();
-    //test_MAX_CHILDS_clients_writing();
-    //test_MAX_CHILDS_reading();
+    test_one_reading_one_writing(0); 
+    test_one_reading_one_writing(2);// forzar primero la lectura
+    test_MAX_CHILDS_clients_writing();
+    test_MAX_CHILDS_wr();
 
     return 0;
 }
