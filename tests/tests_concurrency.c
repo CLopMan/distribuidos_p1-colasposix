@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
         wait(NULL);
     }
     int i = 5;
-    while (i--) {
+    while (i--) { // se observará la última modificación
         test_two_writers(); // en este podremos comprobar la concurrencia 
                                 //si se da el caso en el que ambos empiecen antes de que el primero termine
     }
