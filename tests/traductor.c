@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 int main(int argc, char** argv) {
     FILE *archivo = fopen(argv[1], "rb");
-
+    close(STDOUT_FILENO);
+    int fd = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+    dup(fd);
     if (archivo == NULL) {
         perror("No se pudo abrir el archivo");
         return 1;

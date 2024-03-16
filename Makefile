@@ -30,15 +30,16 @@ lib.so: $(SRC)claves.c
 	@echo "compiling tuple..."
 	gcc -c -fPIC -shared -o lib.so $<
 
-testing: imp_clave.o tests/tests_imp.c tests/custom_client.c lib.so
+testing: imp_clave.o tests/tests_imp.c tests/custom_client.c lib.so tests/traductor.c
 	gcc -o tests_imp tests/tests_imp.c imp_clave.o
 	gcc $(FLAGS) -o tests_concurrency tests/tests_concurrency.c 
 	gcc $(FLAGS) $(LIB) -o custom_client tests/custom_client.c lib.so
+	gcc $(FLAGS) -o traductor tests/traductor.c
 	@bash tests/test_imp.sh
 
 clean:
 	rm *.o
 
 DonLimpio:
-	rm *.o cliente servidor *.so tests_imp traductor tests_concurrency
+	rm *.o cliente servidor *.so tests_imp traductor tests_concurrency *.txt custom_client
 

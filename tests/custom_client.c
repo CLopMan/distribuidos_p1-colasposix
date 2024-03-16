@@ -1,19 +1,29 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "../src/claves.h"
 
 int main(int argc, char *argv[]) {
     int status;
     int sample_key = 0;
     char sample_str[256];
-    strcpy(sample_str, "HELLO WORLD");
-    double sample_vector[] = {3.14, 2.718, 1.618, 7.98e300};
-    int sample_N = 4;
+    sprintf(sample_str, "This file was writen by CLIENT_%d", getpid());
+    double sample_vector[32];
+    
+    for (int i = 0; i < 32; ++i) {
+        sample_vector[i] = getpid() + 1/(double)(i + 1);
+    }
+    int sample_N = 32;
 
-    char Bsample_str[] = "BYE WORLD";
-    double Bsample_vector[] = {6.28, 5.418, 2.18};
-    int Bsample_N = 3; 
+    char Bsample_str[256];
+    sprintf(Bsample_str, "This file was modified by CLIENT_%d", getpid());
+    double Bsample_vector[32];
+    int Bsample_N = 32; 
+
+    for (int i = 0; i < 32; ++i) {
+        Bsample_vector[i] = getpid() - 1/(double)(i + 1);
+    }
 
     int received_N = -1; 
     char received_str[256];

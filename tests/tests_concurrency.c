@@ -5,6 +5,18 @@
 
 #define MAX_CHILDS 5
 
+int traductor(char file[512], char autor[512]) {
+    pid_t tdc = fork();
+    if (tdc == 0) {
+        if (-1 == execl("./traductor", "0", file, autor, NULL)) {
+            perror("execl");
+            return -1;
+        };
+    }
+    wait(NULL);
+    return 0;
+}
+
 int test_one_client() {
     printf("Test 1 sólo cliente:\n");
     int pid = fork();
@@ -27,17 +39,36 @@ int test_two_writers() {
         printf("HIJO\n");
         execl("./custom_client", "0", "3", NULL);
     }
+    pid_t last = -1;
+    for (int i = 0; i < 2; ++i) {
+       last = wait(NULL);
+    }
+    return last;
+
+}
+
+int test_two_creating_same_file() {
+    printf("Tests 3: 2 creando el mismo archivo\n");
+
+    int pid = fork();
+    if (pid != 0) {
+        pid = fork();
+    }
+
+    if (0 == pid) {
+        printf("HIJO\n");
+        execl("./custom_client", "0", "1", NULL);
+    }
     
     for (int i = 0; i < 2; ++i) {
         wait(NULL);
     }
     return 0;
-
 }
 
 int main(int argc, char *argv[]) {
     test_one_client(); // comunicaicón correcta
-    //setup
+    //setup: creating 0.tuple
     int zero_creat = fork();
     if (zero_creat == 0 ) {
         printf("SETUP\n");
@@ -46,11 +77,28 @@ int main(int argc, char *argv[]) {
         wait(NULL);
     }
     int i = 5;
+    pid_t last = 0;
     while (i--) { // se observará la última modificación
-        test_two_writers(); // en este podremos comprobar la concurrencia 
+        last = test_two_writers(); // en este podremos comprobar la concurrencia 
                                 //si se da el caso en el que ambos empiecen antes de que el primero termine
     }
-    //test_two_creating_same_file();
+    printf("last_writer: Client_%d\n", last);
+    char file[512];
+    char autor[512];
+    sprintf(file, "tuples/%d.tuple", 0);
+    sprintf(autor, "Client_%d.txt", last);
+    traductor(file, autor);
+
+
+    //setup: erasing every file
+    int intit_creat = fork();
+    if (intit_creat == 0 ) {
+        printf("SETUP: test3\n");
+        execl("./custom_client", "0", "0", NULL);
+    } else {
+        wait(NULL);
+    }
+    test_two_creating_same_file();
     //test_one_reading_one_writing();
     //test_MAX_CHILDS_clients_writing();
     //test_MAX_CHILDS_reading();
