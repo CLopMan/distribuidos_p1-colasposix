@@ -71,7 +71,7 @@ La aplicación constará de dos partes diferenciadas: los clientes y el servidor
 
 \subsection{Cliente y Biblioteca dinámica}
 \label{subsec:cliente_biblioteca}
-El cliente estará formado por dos partes, la comunicación y las llamadas a los servicios de la aplicación. La primera se corresponde con el fichero \textit{src/claves.c}. Este ofrecerá la interfaz para los servicios especificados en el enunciado y se compilará como una biblioteca dinámica (\textit{libclaves.so})de modo que el mecanismo de comunicación pueda variar sin afectar a los ejecutables del cliente. La segunda, se corresponde con el fichero \textit{src/cliente.c}, esta sólo contendrá llamadas a las funcines ofrecidas por la API de la aplicación distribuída.  
+El cliente estará formado por dos partes, la comunicación y las llamadas a los servicios de la aplicación. La primera se corresponde con el fichero \textit{src/claves.c}. Este ofrecerá la interfaz para los servicios especificados en el enunciado y se compilará como una biblioteca dinámica (\textit{libclaves.so}) de modo que el mecanismo de comunicación pueda variar sin afectar a los ejecutables del cliente. La segunda, se corresponde con el fichero \textit{src/cliente.c}, esta sólo contendrá llamadas a las funcines ofrecidas por la API de la aplicación distribuída.  
 
 De esta forma, logramos una aplicación distribuída en la que la ejecución de los servicios en el servidor sea transparente al usuario. Además, la comunicación será independiente de la implementación del cliente, de forma que se podrá actualizar siempre que se respete la misma interfaz sin necesidad de recompilar el ejecutable de un cliente.
 
@@ -102,12 +102,12 @@ Como hemos mencionado las tuplas se almacenan en ficheros, por lo que la impleme
 A continuación profundizamos en cómo hemos usado estas interfaces durante la implementación de cada una de las funciones:
 
 \begin{itemize}
-  \item \texttt{init()}: Para la función \textit{init} creamos el directorio \textit{tuple}, en el que se encontrarán todas las tuplas, en caso de que no exista y en el caso de que exista se utilizan 
+  \item \texttt{init()}: Para la función \textit{init} creamos el directorio \textit{tuple}, en el que se encontrarán todas las tuplas, en caso de que no exista y en el caso de que exista se borrarán todos los archivos. 
   \item \texttt{set\_value()}: Para la función \textit{set\_value} escribimos en este orden la clave, el string, el tamaño del array y el array de doubles siempre y cuando no exista la tupla que corresponda con la clave proporcionada, a traveś de \textit{fwrite}.
   \item \texttt{modify\_value()}: Para la función \textit{modify\_value} escribimos en el mismo orden que para \textit{set\_value} pero siempre y cuando exista la tupla que corresponde con la clave proporcionada, a traveś de \textit{fwrite}.
-  \item \texttt{get\_value()}: La función \textit{get\_value} realiza la lectura de la misma manera que ocurre en el \textit{modify\_value} pero en vez de utilizar \textit{fwrite} utilizamos \textit{fread} para leer todo el fichero
-  \item \texttt{delete\_key()}: La función \textit{delete\_key} realiza un \textit{unlink} del fichero que corresponde con la clave proporcionada
-  \item \texttt{exist()}: La función \textit{exist} trata de abrir un archivo con permisos de lectura y si consigue hacerlo devuelve un 1, en caso de no poder hacerlo devuelve un 0
+  \item \texttt{get\_value()}: La función \textit{get\_value} realiza la lectura de la misma manera que ocurre en el \textit{modify\_value} pero en vez de utilizar \textit{fwrite} utilizamos \textit{fread} para leer todo el fichero.
+  \item \texttt{delete\_key()}: La función \textit{delete\_key} realiza un \textit{unlink} del fichero que corresponde con la clave proporcionada.
+  \item \texttt{exist()}: La función \textit{exist} trata de abrir un archivo con permisos de lectura y si consigue hacerlo devuelve un 1, en caso contrario devuelve un 0.
 \end{itemize}
 
 
@@ -119,17 +119,17 @@ Tras crear un hilo principal se duerme hasta que el hilo creado tome el mutex y 
 Existirán secciones críticas al acceder a los ficheros, pero no se van a dar condiciones de carrera debido a que las escrituras son más pequeñas que el buffer de escritura de los ficheros. Además, el sistema operativo se encargará de gestionar a los hilos para que no haya entrelazamiento de escrituras simultáneas dado que los ficheros son más pequeños que una página.
 \subsection{Mensajes}
 \label{subsec:mensajes}
-Para el proceso de comunicación necesitamos realizar un paso de mensajes, que se vuelquen en las correspondientes colas POSIX. Para almacenar distintos valores los mensajes utilizan arrays ya que para no pueden usarse punteros debido a que los mensajes viajarán entre procesos y por lo tanto no pueden referirse a la memoria de un proceso en concreto.
-Para ello se han construido 2 estructuras: la petición y la respuesta
+Para el proceso de comunicación necesitamos realizar un paso de mensajes, que se vuelquen en las correspondientes colas POSIX. Para almacenar distintos valores los mensajes utilizan arrays evitando usar punteros debido a que los mensajes viajarán entre procesos y por lo tanto no pueden referirse a la memoria de un proceso en concreto.
+Para ello se han construido 2 estructuras: la petición y la respuesta.
 
 \subsubsection{Petición}
 \label{subsec::peticion}
 Para construir la peticición nos hemos basado en los argumentos de entrada que tenían todos los prototipos de las funciones. A continuación nos pararemos en cada uno de los atributos de la estructura.
 
 \begin{itemize}
-  \item \textit{q\_client}: Este atributo es necesario para identificar el nombre de la cola del cliente que ha realizado la petición con el objetivo de que el servidor pueda devolver una respuesta al cliente.
+  \item \textit{q\_client}: Este atributo es necesario para identificar el nombre de la cola del cliente, que ha realizado la petición, con el objetivo de que el servidor pueda devolver una respuesta al cliente.
   \item \textit{key}: El valor que corresponde a este atributo se utiliza en las funciones para identificar la tupla de forma unívoca.
-  \item \textit{op}: El valor que se coloca en este atributo corresponde al tipo de función con la que se debe de trabajar
+  \item \textit{op}: El valor que se coloca en este atributo corresponde al tipo de función con la que se debe de trabajar.
   \item \textit{value1}: El valor que se almacena en este atributo es la cadena que se almacena en la tupla.
   \item \textit{N\_i}: Esta variable de tipo entero se utiliza como longitud para escribir el array de doubles o como índice para leer este array.
  \item \textit{V\_value2}: Esta variable almacena el array de doubles que corresponde con el valor que se almacena en las tuplas.
@@ -140,15 +140,15 @@ Para construir la peticición nos hemos basado en los argumentos de entrada que 
 Para construir la respuesta nos hemos basado en los valores que devuelven las funciones. A continuación profundizaremos en cada atributo de la respuesta.
 
 \begin{itemize}
-  \item \textit{success}: El valor que contendrá este atributo será un 0 en caso de que la función se haya completado con éxito o un -1 en caso de error
-  \item \textit{value1}: Este atributo se usará para la función \textit{get\_value} con el objetivo de devolver el string de la tupla consultada
-  \item \textit{value2}: Este atributo se usará para devolver el array de doubles de la tupla consultada a través de la función \textit{get\_value}
-  \item \textit{n}: Este atributo contendrá el tamaño del array de doubles de la tupla consultada cuando se llama a la función \textit{get\_value}
+  \item \textit{success}: El valor que contendrá este atributo será un 0 en caso de que la función se haya completado con éxito o un -1 en caso de error.
+  \item \textit{value1}: Este atributo se usará para la función \textit{get\_value} con el objetivo de devolver el string de la tupla consultada.
+  \item \textit{value2}: Este atributo se usará para devolver el array de doubles de la tupla consultada a través de la función \textit{get\_value}.
+  \item \textit{n}: Este atributo contendrá el tamaño del array de doubles de la tupla consultada cuando se llama a la función \textit{get\_value}.
 \end{itemize}
 
 \subsection{Uso de ficheros}
 \label{subsec:uso_de_ficheros}
-Para almacenar las tuplas se han utilizado ficheros. Hemos decidido que estos ficheros en binarios para definir su estructura y adaptarla a la perfección al servicio.
+Para almacenar las tuplas se han utilizado ficheros. Hemos decidido que estos ficheros son binarios para definir su estructura y adaptarla a la perfección al servicio.
 Dado el carácter de los ficheros, nos permite mantener el contenido de las tuplas entre distintas ejecuciones del servidor. 
 
 La estructura de los ficheros será la siguiente: 256 bytes reservados para texto, un número entero \textit{N} de 4 bytes que se corresponderá con el número de elementos que vendrán a continuación, y \textit{N} números en coma flotante de doble precisión. 
